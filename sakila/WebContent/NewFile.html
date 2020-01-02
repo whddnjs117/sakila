@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<body>
+
+</body>
+<script>
+
+	$.ajax({
+		url:"",
+		method:"",
+		async : false,
+		success: function() {
+			console.log(1);
+			$.ajax({
+				url:"",
+				method:"",
+				success: function() {
+					console.log(1);
+				}
+			})
+		}
+	})
+	$.ajax({
+		url:"",
+		method:"",
+		success: function() {
+			console.log(2);
+			$.ajax({
+				url:"",
+				method:"",
+				success: function() {
+					console.log(2);
+				}
+			})
+		}
+	})
+	
+	$.ajax({
+		url:"",
+		method:"",
+		success: function() {
+			console.log(3);
+			$.ajax({
+				url:"",
+				method:"",
+				success: function() {
+					console.log(3);
+				}
+			})
+		}
+	})
+	
+	$.ajax({
+		url:"",
+		method:"",
+		success: function() {
+			console.log(4);
+			$.ajax({
+				url:"",
+				method:"",
+				success: function() {
+					console.log(4);
+				}
+			})
+		}
+	})
+	
+	$.ajax({
+		url:"",
+		method:"",
+		success: function() {
+			console.log(5);
+			$.ajax({
+				url:"",
+				method:"",
+				success: function() {
+					console.log(5);
+				}
+			})
+		}
+	})
+	
+	
+</script>
+</html>

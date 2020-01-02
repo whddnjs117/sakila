@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>sakila index</title>
+<meta charset="UTF-8">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+</style>
+</head>
+<body>
+    <div id="aside">
+      
+    </div>
+    <div id="section">
+        <h1>CUSTOMER</h1>
+        <h2>add customer</h2>
+        <h3>주소를 먼저 입력</h3>
+	        <div>
+	        	<!-- 주소가 먼저 입력 -->
+	        	<table border="1">
+        		<tr>
+        			<td>
+        				<!--  country list -->
+        				<div>
+        					<select size="10" id="countryList">
+        					
+        					</select>
+        				</div>
+        			</td>
+        			<td>
+        				<!--  city list -->
+        				<div>
+        					<select size="10" id="cityList">
+        					
+        					</select>
+        				</div>
+        			</td>
+        		</tr>
+        	</table>
+	        </div>
+	        <div>
+	        	<!-- 고객의 정보가 입력 -->
+	        	<h3>고객 정보를 입력</h3>
+	        	<form>
+	        		<fieldset>
+	        			<legend>주소 입력</legend>
+	        			<div>cityId : <input type="text" readonly="readonly" id="cityId"></div>
+	        			<div>address : <input type="text" id="address"></div>
+	        			<div>address2 : <input type="text" id="address2"></div>
+	        			<div>district : <input type="text" id="district"></div>
+	        			<div>postalCode : <input type="text" id="postalCode"></div>
+	        			<div>phone : <input type="text" id="phone"></div>
+	        		</fieldset>
+	        		<fieldset>
+	        			<legend>고객 정보</legend>
+		        		<div>
+		        			storeId : 
+		        			<select id="storeId">
+		        				<option>1</option>
+		        				<option>2</option>
+		        			</select>
+		        		</div>
+		        		<div>firstName : <input type="text" id="firstName"></div>
+		        		<div>lastName : <input type="text" id="lastName"></div>
+		        		<div>email : <input type="text" id="email"></div>
+		        		
+	        		</fieldset>
+	        		<button type="button" id="addCustomer">고객 입력</button>
+	        	</form>
+	        </div>
+        <h2>customer list</h2> <!-- 고객 정보(일부) 리스트: 클릭하면 상세정보로 링크-->
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	$("#aside").load("/sakila/aside.html");
+	
+	$.ajax({ //나라 리스트를 뽑기위함
+		url :"/sakila/selectCountryListAll",
+		method:"POST",
+		success:function(json) {
+			$("#countryList").empty();
+			console.log("countryList success!");
+			console.log(json);
+			$(json).each(function(index, item){
+				let html = "<option value='"+item.countryId+"'>"+item.country+"</option>";
+				$("#countryList").append(html);
+			});
+			
+		}
+	});
+	$("#countryList").change(function() { //나라를 선택하고 그나라에속하는 도시의리스트
+		$.ajax({
+			url :"/sakila/selectCityListByCountry",
+			method:"POST",
+			data:{"countryId":$("#countryList").val()},
+			success:function(json) {
+				$("#cityList").empty();
+				console.log("cityList success!");
+				console.log(json);
+				$(json).each(function(index, item){
+					let html = "<option value='"+item.cityId+"'>"+item.city+"</option>";
+					$("#cityList").append(html);
+				});
+				
+			}
+		});
+	});
+	$("#cityList").change(function() {//도시를 선택했을때 도시의 id값을 넘겨주기위해 출력
+		$("#cityId").val($("#cityList").val());
+	});
+	
+	$("#addCustomer").click(function() {
+		$.ajax({
+			url:"/sakila/insertCustomer",
+			method:"POST",
+			data:{"cityId":$("#cityId").val(),"address":$("#address").val(),"address2":$("#address2").val(),"district":$("#district").val(),"postalCode":$("#postalCode").val(),"phone":$("#phone").val(),"storeId":$("#storeId").val(),"firstName":$("#firstName").val(),"lastName":$("#lastName").val(),"email":$("#email").val()},
+			success:function(json) {
+				console.log(json);
+			}
+		});
+	});
+</script>
+</html>
